@@ -5,10 +5,12 @@
 package gdx.game.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import gdx.game.objects.Button;
 
 /**
  *
@@ -19,22 +21,34 @@ public class ScrMenuMain implements Screen {
     Game game;
     Sprite sprBG;
     Texture txtBG;
+    Button btnPlay;
     public ScrMenuMain(Game _game) {
         game = _game;
         txtBG = new Texture ("bg3.jpg");
         batch = new SpriteBatch();
         sprBG = new Sprite(txtBG, 0 ,0, 1144,744);   
-    }
-
-    @Override
-    public void show() {
+        btnPlay = new Button(100, 100, 200, 200, "badlogic.jpg");
     }
 
     @Override
     public void render(float delta) {
+        checkButtons();
         batch.begin();
         sprBG.draw(batch);
+        btnPlay.draw(batch);
         batch.end();
+    }
+    
+    private void checkButtons(){
+        if(Gdx.input.justTouched()){
+            if(btnPlay.isMousedOver()){
+                System.out.println("Button is clicked");
+            }
+        }
+    }
+    
+    @Override
+    public void show() {
     }
 
     @Override

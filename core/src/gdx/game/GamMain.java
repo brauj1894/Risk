@@ -46,18 +46,33 @@ public class GamMain extends Game {
     }
     
     public void changeScreen(int nScreen){
-        if(nScreen == 0){ // Main Menu
-            setScreen(scrMenuMain);
-        } else if(nScreen == 1){ // Instructions
-            setScreen(scrMenuInstruct);
-        } else if(nScreen == 2){ // Game Setup
-            setScreen(scrGamSetup);
-        } else if(nScreen == 3){ // Game
-            setScreen(scrGam);
-        } else if(nScreen == 4){ // Attack/Defense
-            setScreen(scrGamAttack);
-        } else if(nScreen == 5){ // Game Over
-            setScreen(scrGamOver);
+        switch (nScreen) {
+            case 0:
+                // Main Menu
+                setScreen(scrMenuMain);
+                break;
+            case 1:
+                // Instructions
+                setScreen(scrMenuInstruct);
+                break;
+            case 2:
+                // Game Setup
+                setScreen(scrGamSetup);
+                break;
+            case 3:
+                // Game
+                setScreen(scrGam);
+                break;
+            case 4:
+                // Attack/Defense
+                setScreen(scrGamAttack);
+                break;
+            case 5:
+                // Game Over
+                setScreen(scrGamOver);
+                break;
+            default:
+                break;
         }
     }
 }
