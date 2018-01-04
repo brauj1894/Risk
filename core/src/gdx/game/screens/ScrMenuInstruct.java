@@ -44,7 +44,7 @@ public class ScrMenuInstruct implements Screen {
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
             if (btnExit.isMousedOver()) {
-                System.out.println("Exiting to main menu");
+                game.changeScreen(0);
             }
         }
     }
