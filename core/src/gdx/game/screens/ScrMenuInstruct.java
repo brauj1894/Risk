@@ -4,16 +4,17 @@
  */
 package gdx.game.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import gdx.game.GamMain;
 
 /**
  *
  * @author brauj1894
  */
 public class ScrMenuInstruct implements Screen{
-    public ScrMenuInstruct(Game _game) {
-        
+    GamMain game;
+    public ScrMenuInstruct(GamMain _game) {
+        game = _game;
     }
     
     @Override

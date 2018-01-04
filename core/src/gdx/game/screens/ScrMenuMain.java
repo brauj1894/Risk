@@ -4,12 +4,12 @@
  */
 package gdx.game.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import gdx.game.GamMain;
 import gdx.game.objects.Button;
 
 /**
@@ -18,11 +18,11 @@ import gdx.game.objects.Button;
  */
 public class ScrMenuMain implements Screen {
     SpriteBatch batch;
-    Game game;
+    GamMain game;
     Sprite sprBG;
     Texture txtBG;
     Button btnPlay;
-    public ScrMenuMain(Game _game) {
+    public ScrMenuMain(GamMain _game) {
         game = _game;
         txtBG = new Texture ("bg3.jpg");
         batch = new SpriteBatch();
@@ -42,7 +42,7 @@ public class ScrMenuMain implements Screen {
     private void checkButtons(){
         if(Gdx.input.justTouched()){
             if(btnPlay.isMousedOver()){
-                System.out.println("Button is clicked");
+                game.changeScreen(1);
             }
         }
     }
