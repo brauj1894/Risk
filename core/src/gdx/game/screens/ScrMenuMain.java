@@ -21,13 +21,14 @@ public class ScrMenuMain implements Screen {
     GamMain game;
     Sprite sprBG;
     Texture txtBG;
-    Button btnPlay;
+    Button btnPlay, btnInst;
     public ScrMenuMain(GamMain _game) {
         game = _game;
         txtBG = new Texture ("bg3.jpg");
         batch = new SpriteBatch();
         sprBG = new Sprite(txtBG, 0 ,0, 1144,744);   
-        btnPlay = new Button(100, 100, 200, 200, "badlogic.jpg");
+        btnPlay = new Button(200, 100, 200, 100, "play.png");
+        btnInst = new Button(744, 100, 200, 100, "inst.png");
     }
 
     @Override
@@ -36,6 +37,7 @@ public class ScrMenuMain implements Screen {
         batch.begin();
         sprBG.draw(batch);
         btnPlay.draw(batch);
+        btnInst.draw(batch);
         batch.end();
     }
     
