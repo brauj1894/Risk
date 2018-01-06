@@ -11,6 +11,7 @@ import gdx.game.screens.ScrGamOver;
 import gdx.game.screens.ScrGamSetup;
 import gdx.game.screens.ScrMenuInstruct;
 import gdx.game.screens.ScrMenuMain;
+import gdx.game.scratches.ScratchGamAttack;
 
 /**
  * @author brauj1894
@@ -24,6 +25,7 @@ public class GamMain extends Game {
     ScrGam  scrGam;
     ScrGamAttack  scrGamAttack;
     ScrGamOver  scrGamOver;
+    ScratchGamAttack ScratchGamAttack;
     
     @Override
     public void create() {
@@ -33,6 +35,7 @@ public class GamMain extends Game {
         scrGam = new gdx.game.screens.ScrGam(this);
         scrGamAttack = new gdx.game.screens.ScrGamAttack(this);
         scrGamOver = new gdx.game.screens.ScrGamOver(this);
+        ScratchGamAttack = new gdx.game.scratches.ScratchGamAttack(this);
         changeScreen(0);
     }
 
@@ -70,6 +73,10 @@ public class GamMain extends Game {
             case 5:
                 // Game Over
                 setScreen(scrGamOver);
+                break;
+            case 6:
+                //Scratch for attack screen
+                setScreen(ScratchGamAttack);
                 break;
             default:
                 break;
