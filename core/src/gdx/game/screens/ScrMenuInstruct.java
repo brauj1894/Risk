@@ -27,9 +27,9 @@ public class ScrMenuInstruct implements Screen {
 
     public ScrMenuInstruct(GamMain _game) {
         game = _game;
-        txtBG = new Texture("bg3.jpg");
+        txtBG = new Texture("paper-background.jpg");
         batch = new SpriteBatch();
-        sprBG = new Sprite(txtBG, 0, 0, 1144, 744);
+        sprBG = new Sprite(txtBG, 0, 0, 1400, 1008);
         btnExit = new Button(400, 80, 400, 100, "exit.png");
     }
 

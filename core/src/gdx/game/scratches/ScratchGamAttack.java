@@ -31,9 +31,9 @@ public class ScratchGamAttack implements Screen {
     public ScratchGamAttack(GamMain _game) {
         txtBG = new Texture("bg3.jpg");
         sprBG = new Sprite(txtBG, 0, 0, 1144, 744);
-        btnAttack = new Button(100, 100, 100, 100, "button_attack.png");
-        btnDefend = new Button(200, 200, 100, 100, "button_defend.png");
-        btnEndBattle = new Button(300, 300, 100, 100, "button_end-battle.png");
+        btnAttack = new Button(200, 650, 100, 100, "button_attack.png");
+        btnDefend = new Button(800, 650, 100, 100, "button_defend.png");
+        btnEndBattle = new Button(500, 100, 100, 100, "button_end-battle.png");
         batch = new SpriteBatch();
     }
 
@@ -53,29 +53,47 @@ public class ScratchGamAttack implements Screen {
         batch.end();
     }
     boolean isAttack = false, isDefend = false;
+    boolean isTroopsA = true, isTroopsD = true;
+    int nTroopsA = 5, nTroopsD = 3;
+
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
             if (btnEndBattle.isMousedOver()) {
-                game.changeScreen(3);
-            } else if (btnAttack.isMousedOver()) {
-                nRandAttack = ranGen.nextInt(10);
-                System.out.println(nRandAttack);
-                isAttack = true;
-            } else if (btnDefend.isMousedOver()) {
-                nRandDefend = ranGen.nextInt(10);
-                System.out.println(nRandDefend);
-                isDefend = true;
+                game.changeScreen(0);
             }
-            if (isAttack && isDefend) {
-                if (nRandAttack > nRandDefend) {
-                    System.out.println("Defenders lost one");
-                } else if (nRandAttack < nRandDefend) {
-                    System.out.println("Attackers lost one");
-                } else if (nRandAttack == nRandDefend) {
-                    System.out.println("Nobody dies this night");
+            if (isTroopsA && isTroopsD) {
+                if (btnAttack.isMousedOver()) {
+                    nRandAttack = ranGen.nextInt(10);
+                    System.out.println(nRandAttack);
+                    isAttack = true;
+                } else if (btnDefend.isMousedOver()) {
+                    nRandDefend = ranGen.nextInt(10);
+                    System.out.println(nRandDefend);
+                    isDefend = true;
+                }
+
+                if (isAttack && isDefend) {
+                    if (nRandAttack > nRandDefend) {
+                        System.out.println("Defenders lost one");
+                        nTroopsD -= 1;
+                        System.out.println(nTroopsD);
+                        if (nTroopsD == 0) {
+                            isTroopsD = false;
+                        }
+                    } else if (nRandAttack < nRandDefend) {
+                        System.out.println("Attackers lost one");
+                        nTroopsA -= 1;
+                        System.out.println(nTroopsA);
+                        if (nTroopsA == 0) {
+                            isTroopsA = false;
+                        }
+                    } else if (nRandAttack == nRandDefend) {
+                        System.out.println("Nobody dies this night");
+                    }
                 }
             }
         }
+
     }
 
     @Override
