@@ -57,7 +57,7 @@ public class ScrMenuInstruct implements Screen {
 "\n" +
 "Attacking and Defending:\n" +
 "While you are in a battle, You will have the option to attack or to end the battle if you want to stop.\n" +
-"When you attack, the attacker will hit the attack button and the defender will hit the defend button. A random number will be chosen for each player for each attack.\n" +
+"When you attack/ defend, you will click a common battle button. A random number will be chosen for each player for each attack.\n" +
 "The person with the highest number will win that attacking round. The loser of the attacking round will lose a troop.\n" +
 "At the end of the battle, the player with no troops left in their territory will lost that territory and the battle.\n" +
 "If the battle ends with no side losing all their troops, it will be a mutual end no winners no losers.\n" +
