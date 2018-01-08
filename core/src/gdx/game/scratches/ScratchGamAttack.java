@@ -30,6 +30,7 @@ public class ScratchGamAttack implements Screen {
     Button btnAttack, btnDefend, btnEndBattle;
 
     public ScratchGamAttack(GamMain _game) {
+        game = _game;
         txtBG = new Texture("bg3.jpg");
         txtTroopsA = new Texture("button_troops.png");
         txtTroopsD = new Texture("button_troops.png");

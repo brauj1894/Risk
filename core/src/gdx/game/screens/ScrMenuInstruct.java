@@ -43,7 +43,7 @@ public class ScrMenuInstruct implements Screen {
         
         batch.end();
         SpriteBatch spriteBatch;
-        BitmapFont font;
+        BitmapFont font;//https://stackoverflow.com/questions/12466385/how-can-i-draw-text-using-libgdx-java
         CharSequence str = "Welcome to Risk, Joalandia conquest\n" +
 "Pregame:\n" +
 "When you click the play button, you will be taken to a pregame setup screen where you will choose your provinces and territories.\n" +
