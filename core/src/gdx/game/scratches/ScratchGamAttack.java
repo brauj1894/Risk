@@ -25,23 +25,24 @@ public class ScratchGamAttack implements Screen {
     int nRandAttack, nRandDefend;
     SpriteBatch batch;
     GamMain game;
-    Sprite sprBG, sprTroopsA, sprTroopsD;
-    Texture txtBG, txtTroopsA, txtTroopsD;
-    Button btnAttack, btnDefend, btnEndBattle;
+    Sprite sprBG;
+    Texture txtBG, txtAttack, txtDefend,txtWhite1,txtWhite2;
+    Button btnEndBattle, btnBattle;
 
     public ScratchGamAttack(GamMain _game) {
         game = _game;
         txtBG = new Texture("bg3.jpg");
-        txtTroopsA = new Texture("button_troops.png");
-        txtTroopsD = new Texture("button_troops.png");
+        txtAttack = new Texture("button_attack.png");
+        txtDefend = new Texture("button_defend.png");
+        txtWhite1 = new Texture("button.png");
+        txtWhite2 = new Texture("button.png");
         sprBG = new Sprite(txtBG, 0, 0, 1144, 744);
-        sprTroopsA = new Sprite(txtTroopsA,200,500,100,100);
-        sprTroopsD = new Sprite(txtTroopsD, 800,500,100,100);
-        btnAttack = new Button(200, 650, 100, 100, "button_attack.png");
-        btnDefend = new Button(800, 650, 100, 100, "button_defend.png");
+        btnBattle = new Button(500, 650, 100, 100, "button_battle.png");
         btnEndBattle = new Button(500, 100, 100, 100, "button_end-battle.png");
         batch = new SpriteBatch();
-        
+        //sprAttack.setX(200);
+        //sprAttack.setY(500);
+
     }
 
     @Override
@@ -54,11 +55,13 @@ public class ScratchGamAttack implements Screen {
         checkButtons();
         batch.begin();
         sprBG.draw(batch);
-        btnAttack.draw(batch);
-        btnDefend.draw(batch);
-        sprTroopsA.draw(batch);
-        sprTroopsD.draw(batch);
+        batch.draw(txtAttack, 200, 650);
+        batch.draw(txtWhite1, 325, 650);
+        batch.draw(txtDefend, 800, 650);
+        batch.draw(txtWhite2, 925, 650);
+        btnBattle.draw(batch);
         btnEndBattle.draw(batch);
+
         batch.end();
         SpriteBatch spriteBatch;
         BitmapFont font;
@@ -67,11 +70,11 @@ public class ScratchGamAttack implements Screen {
         spriteBatch = new SpriteBatch();
         spriteBatch.begin();
         font = new BitmapFont();
-        font.draw(spriteBatch, sNumberAttackers, 200, 650);
-        font.draw(spriteBatch, sNumberDefenders, 800, 650);
+        font.draw(spriteBatch, sNumberAttackers, 350, 670);
+        font.draw(spriteBatch, sNumberDefenders, 950, 670);
         spriteBatch.end();
     }
-    boolean isAttack = false, isDefend = false;
+    boolean isBattle = false;
     boolean isTroopsA = true, isTroopsD = true;
     int nTroopsA = 5, nTroopsD = 3;
 
@@ -81,17 +84,17 @@ public class ScratchGamAttack implements Screen {
                 game.changeScreen(0);
             }
             if (isTroopsA && isTroopsD) {
-                if (btnAttack.isMousedOver()) {
+                if (btnBattle.isMousedOver()) {
                     nRandAttack = ranGen.nextInt(10);
                     System.out.println(nRandAttack);
-                    isAttack = true;
-                } else if (btnDefend.isMousedOver()) {
+
+
                     nRandDefend = ranGen.nextInt(10);
                     System.out.println(nRandDefend);
-                    isDefend = true;
+                    isBattle = true;
                 }
 
-                if (isAttack && isDefend) {
+                if (isBattle) {
                     if (nRandAttack > nRandDefend) {
                         System.out.println("Defenders lost one");
                         nTroopsD -= 1;
@@ -139,5 +142,4 @@ public class ScratchGamAttack implements Screen {
     public void dispose() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
