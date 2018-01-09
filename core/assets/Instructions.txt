@@ -1,0 +1,20 @@
+Welcome to Risk, Joalandia conquest
+Pregame:
+When you click the play button, you will be taken to a pregame setup screen where you will choose your provinces and territories.
+
+Game:
+After you have done this, the game will commence. While it is your turn you will have 4 options to choose from, Attack, Move troops, Place troops, end turn.
+In order to attack the enemy you will need to select the province in which you are attacking and the province you will attack with.
+At any point of your turn you may move the troops you already have between the provinces you own.
+You will receive troops at the beginning of each turn to place down on your territories. The amount of troops you recieve at these points will be determined by your owned territories
+When it is not your turn the other player may attack you and take your land.
+
+Attacking and Defending:
+While you are in a battle, You will have the option to attack or to end the battle if you want to stop.
+When you attack/ defend, you will click a common battle button. A random number will be chosen for each player for each attack.
+The person with the highest number will win that attacking round. The loser of the attacking round will lose a troop.
+At the end of the battle, the player with no troops left in their territory will lost that territory and the battle.
+If the battle ends with no side losing all their troops, it will be a mutual end no winners no losers.
+
+How to Win:
+In order to win, you need to control all of the territories in the country.

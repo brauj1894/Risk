@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import gdx.game.GamMain;
 import gdx.game.objects.Button;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
 
 /**
  *
@@ -20,57 +23,52 @@ import gdx.game.objects.Button;
 public class ScrMenuInstruct implements Screen {
 
     SpriteBatch batch;
+    SpriteBatch spriteBatch;
+    BitmapFont font;
     GamMain game;
     Sprite sprBG;
     Texture txtBG;
     Button btnExit;
+    CharSequence str;
 
-    public ScrMenuInstruct(GamMain _game) {
+    public ScrMenuInstruct(GamMain _game){
         game = _game;
         txtBG = new Texture("paper-background.jpg");
         batch = new SpriteBatch();
         sprBG = new Sprite(txtBG, 0, 0, 1400, 1008);
         btnExit = new Button(400, 80, 400, 100, "exit.png");
+        spriteBatch = new SpriteBatch();
+        font = new BitmapFont();
+        getText();
+    }
+    
+    private void getText(){
+        try{
+            Scanner fin = new Scanner(new FileReader("Instructions.txt"));
+            str = "";
+            for(int i = 0; i < 20; i++){
+                str += fin.nextLine() + "\n";
+            }
+        }
+        catch(IOException ex){
+        System.out.println (ex.toString());
+        System.out.println("Could not find file");
+        }
+        
     }
 
     @Override
     public void render(float delta) {
-        
         checkButtons();
         batch.begin();
         sprBG.draw(batch);
         btnExit.draw(batch);
-        
         batch.end();
-        SpriteBatch spriteBatch;
-        BitmapFont font;//https://stackoverflow.com/questions/12466385/how-can-i-draw-text-using-libgdx-java
-        CharSequence str = "Welcome to Risk, Joalandia conquest\n" +
-"Pregame:\n" +
-"When you click the play button, you will be taken to a pregame setup screen where you will choose your provinces and territories.\n" +
-"\n" +
-"Game:\n" +
-"After you have done this, the game will commence. While it is your turn you will have 4 options to choose from, Attack, Move troops, Place troops, end turn.\n" +
-"In order to attack the enemy you will need to select the province in which you are attacking and the province you will attack with.\n" +
-"At any point of your turn you may move the troops you already have between the provinces you own.\n" +
-"You will receive troops at the beginning of each turn to place down on your territories. The amount of troops you recieve at these points will be determined by your owned territories\n" +
-"When it is not your turn the other player may attack you and take your land.\n" +
-"\n" +
-"Attacking and Defending:\n" +
-"While you are in a battle, You will have the option to attack or to end the battle if you want to stop.\n" +
-"When you attack/ defend, you will click a common battle button. A random number will be chosen for each player for each attack.\n" +
-"The person with the highest number will win that attacking round. The loser of the attacking round will lose a troop.\n" +
-"At the end of the battle, the player with no troops left in their territory will lost that territory and the battle.\n" +
-"If the battle ends with no side losing all their troops, it will be a mutual end no winners no losers.\n" +
-"\n" +
-"How to Win:\n" +
-"In order to win, you need to control all of the territories in the country.";
-        spriteBatch = new SpriteBatch();
         spriteBatch.begin();
-        font = new BitmapFont();
         font.draw(spriteBatch, str, 10, 700);
         spriteBatch.end();
     }
-
+    
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
             if (btnExit.isMousedOver()) {
