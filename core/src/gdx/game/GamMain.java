@@ -12,7 +12,7 @@ import gdx.game.screens.ScrGamSetup;
 import gdx.game.screens.ScrMenuInstruct;
 import gdx.game.screens.ScrMenuMain;
 import gdx.game.scratches.ScratchGamAttack;
-import java.io.IOException;
+import gdx.game.scratches.ScratchGamTiled;
 
 /**
  * @author brauj1894
@@ -27,6 +27,7 @@ public class GamMain extends Game {
     ScrGamAttack  scrGamAttack;
     ScrGamOver  scrGamOver;
     ScratchGamAttack ScratchGamAttack;
+    ScratchGamTiled ScratchGamTiled;
     
     @Override
     public void create() {
@@ -37,6 +38,7 @@ public class GamMain extends Game {
         scrGamAttack = new gdx.game.screens.ScrGamAttack(this);
         scrGamOver = new gdx.game.screens.ScrGamOver(this);
         ScratchGamAttack = new gdx.game.scratches.ScratchGamAttack(this);
+        ScratchGamTiled = new gdx.game.scratches.ScratchGamTiled(this);
         changeScreen(0);
     }
 
@@ -78,6 +80,10 @@ public class GamMain extends Game {
             case 6:
                 //Scratch for attack screen
                 setScreen(ScratchGamAttack);
+                break;
+            case 7:
+                //Scratch for the tiled map
+                setScreen(ScratchGamTiled);
                 break;
             default:
                 break;
