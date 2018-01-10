@@ -5,7 +5,12 @@
  */
 package gdx.game.scratches;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import gdx.game.GamMain;
 
 /**
@@ -15,43 +20,55 @@ import gdx.game.GamMain;
 public class ScratchGamTiled implements Screen {
     
     GamMain game;
+    OrthographicCamera camera;
+    private TiledMap tiledMap;
+    private OrthogonalTiledMapRenderer tmr;
     
     public ScratchGamTiled(GamMain _game){
         game = _game;
+        
+        // Loading Tiled Map
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false,w,h);
+        camera.update();
+        tiledMap = new TmxMapLoader().load("tiledMap2.tmx");
+        tmr = new OrthogonalTiledMapRenderer(tiledMap);
     }
 
-    @Override
-    public void show() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public void render(float delta) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // Draw Tiled Map
+        camera.update();
+        tmr.setView(camera);
+        tmr.render();
+    }
+    
+    @Override
+    public void show() {
     }
 
     @Override
     public void resize(int width, int height) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void pause() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void resume() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void hide() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

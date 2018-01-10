@@ -44,7 +44,7 @@ public class ScrMenuMain implements Screen {
     private void checkButtons(){
         if(Gdx.input.justTouched()){
             if(btnPlay.isMousedOver()){
-                game.changeScreen(6);
+                game.changeScreen(7);
             }
             if(btnInst.isMousedOver()){
                 game.changeScreen(1);
