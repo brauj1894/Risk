@@ -27,7 +27,7 @@ public class Button extends Sprite{
     
     public boolean isMousedOver(){ // Checks if the mouse is over the button, not whether the mouse was clicked
         if(Gdx.input.getX() > nX && Gdx.input.getX() < nX + nW){
-            if(Gdx.input.getY()*(-1)+744 > nY && Gdx.input.getY()*(-1)+744 < nY + nH){
+            if(Gdx.input.getY()*(-1)+Gdx.graphics.getHeight() > nY && Gdx.input.getY()*(-1)+Gdx.graphics.getHeight() < nY + nH){
                 return true;
             }
         }
