@@ -82,7 +82,7 @@ public class ScratchGamAttack implements Screen {
         if (Gdx.input.justTouched()) {
             if (btnEndBattle.isMousedOver()) {
                 game.changeScreen(0);
-            }
+            } 
             if (isTroopsA && isTroopsD) {
                 if (btnBattle.isMousedOver()) {
                     nRandAttack = ranGen.nextInt(10);
