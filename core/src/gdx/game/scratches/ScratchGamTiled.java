@@ -7,6 +7,7 @@ package gdx.game.scratches;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -26,14 +27,15 @@ public class ScratchGamTiled implements Screen {
     
     public ScratchGamTiled(GamMain _game){
         game = _game;
-        
-        // Loading Tiled Map
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-
+        
+        // Creating Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
+        
+        // Loading Tiled Map
         tiledMap = new TmxMapLoader().load("tiledMap2.tmx");
         tmr = new OrthogonalTiledMapRenderer(tiledMap);
     }
@@ -42,6 +44,12 @@ public class ScratchGamTiled implements Screen {
 
     @Override
     public void render(float delta) {
+        graphics();
+    }
+    
+    private void graphics(){
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glColorMask(true, true, true, true);
         // Draw Tiled Map
         camera.update();
         tmr.setView(camera);

@@ -6,6 +6,7 @@ package gdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -39,6 +40,7 @@ public class ScrMenuInstruct implements Screen {
         btnExit = new Button(400, 80, 400, 100, "exit.png");
         spriteBatch = new SpriteBatch();
         font = new BitmapFont();
+        font.setColor(Color.BLACK);
         getText();
     }
     
