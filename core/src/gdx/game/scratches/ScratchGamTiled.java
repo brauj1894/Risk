@@ -27,12 +27,10 @@ public class ScratchGamTiled implements Screen {
     
     public ScratchGamTiled(GamMain _game){
         game = _game;
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
         
         // Creating Camera
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
         
         // Loading Tiled Map
@@ -49,7 +47,7 @@ public class ScratchGamTiled implements Screen {
     
     private void graphics(){
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glColorMask(true, true, true, true);
+        Gdx.gl.glClearColor(32/256f, 64/256f, 256/256f, 1);
         // Draw Tiled Map
         camera.update();
         tmr.setView(camera);
