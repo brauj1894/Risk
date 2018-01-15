@@ -26,7 +26,7 @@ public class ScrGamSetup implements Screen{
     SpriteBatch batch;
     GamMain game;
     Texture txtBG, txtParch;
-    Button btnNextPhase, btnSkipTurn;
+    Button btnNextPhase, btnEndTurn;
     Sprite sprParch, sprWater;
     OrthographicCamera camera;
     TiledMap tiledMap;
@@ -39,7 +39,7 @@ public class ScrGamSetup implements Screen{
         sprParch.setX(768);
         batch = new SpriteBatch();
         btnNextPhase = new Button(100,200,151,40,"button_next-phase.png");
-        btnSkipTurn = new Button(100,100,128,40,"button_skip-turn.png");
+        btnEndTurn = new Button(100,100,128,40,"button_end-turn.png");
         // Creating Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -67,7 +67,7 @@ public class ScrGamSetup implements Screen{
     }
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
-            if (btnSkipTurn.isMousedOver()) {
+            if (btnEndTurn.isMousedOver()) {
                 
             }else if(btnNextPhase.isMousedOver()){
                 
