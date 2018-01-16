@@ -27,6 +27,7 @@ public class ScratchGamTiled implements Screen {
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer tmr;
     Tile arTiles [][] = new Tile [3][3];
+    Tile tile1, tile2;
     
     public ScratchGamTiled(GamMain _game){
         game = _game;
@@ -43,9 +44,11 @@ public class ScratchGamTiled implements Screen {
         // Create Tiles
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
-                arTiles[i][j] = new Tile(game);
+                arTiles[i][j] = new Tile(game, i, j);
             }
         }
+        tile1 = null;
+        tile2 = null;
     }
 
     
@@ -67,17 +70,53 @@ public class ScratchGamTiled implements Screen {
     
     private void checkInput(){
         if(Gdx.input.justTouched()){
-            Vector2 vTemp = mouseLocationOnMap();
+            Vector2 vTemp = getMouseLocationOnMap();
+            
+            // Tests adding troops to tiles
+            /*
             arTiles[(int)vTemp.x][(int)vTemp.y].nTroopCount++;
             System.out.println("X: "+vTemp.x+" Y: "+vTemp.y+" Troops: "+arTiles[(int)vTemp.x][(int)vTemp.y].nTroopCount);
+            */
+            
+            // Tests adjactency
+            if(tile1 == null){
+                tile1 = arTiles[(int)vTemp.x][(int)vTemp.y];
+            } else {
+                tile2 = arTiles[(int)vTemp.x][(int)vTemp.y];
+                if(isAdjacent(tile1, tile2)){
+                    System.out.println("X:"+tile1.getX()+" Y:"+tile1.getY()+" is adjacent to X:"+tile2.getX()+" Y:"+tile2.getY());
+                } else {
+                    System.out.println("X:"+tile1.getX()+" Y:"+tile1.getY()+" is not adjacent to X:"+tile2.getX()+" Y:"+tile2.getY());
+                }
+                tile1 = null;
+                tile2 = null;
+            }
         }
     }
     
-    private Vector2 mouseLocationOnMap(){
+    private Vector2 getMouseLocationOnMap(){
         Vector2 vMapLocation = new Vector2(0, 0);
         vMapLocation.x = Gdx.input.getX() / 256; // 256 is the tile size
         vMapLocation.y = Gdx.input.getY() / 256; // 256 is the tile size
         return vMapLocation;
+    }
+    
+    private boolean isAdjacent(Tile tile1, Tile tile2){
+        if(tile1.getX() == tile2.getX()){
+            if(tile1.getY() == tile2.getY() + 1){
+                return true;
+            } else if(tile1.getY() == tile2.getY() - 1){
+                return true;
+            }
+        }
+        if(tile1.getY() == tile2.getY()){
+            if(tile1.getX() == tile2.getX() + 1){
+                return true;
+            } else if(tile1.getX() == tile2.getX() - 1){
+                return true;
+            }
+        }
+        return false;
     }
     
     @Override
