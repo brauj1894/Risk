@@ -38,8 +38,8 @@ public class ScrGamSetup implements Screen{
         sprParch = new Sprite(txtParch,0,0,1400,1008);
         sprParch.setX(768);
         batch = new SpriteBatch();
-        btnNextPhase = new Button(100,200,151,40,"button_next-phase.png");
-        btnEndTurn = new Button(100,100,128,40,"button_end-turn.png");
+        btnNextPhase = new Button(800,600,151*2,40*2,"button_next-phase.png");
+        btnEndTurn = new Button(800,400,128*2,40*2,"button_end-turn.png");
         // Creating Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -63,14 +63,16 @@ public class ScrGamSetup implements Screen{
         
         batch.begin();
         sprParch.draw(batch);
+        btnNextPhase.draw(batch);
+        btnEndTurn.draw(batch);
         batch.end();
     }
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
             if (btnEndTurn.isMousedOver()) {
-                
+                System.out.println("Your turn is over");
             }else if(btnNextPhase.isMousedOver()){
-                
+                System.out.println("Starting the next phase of your turn");
             }
     }
     }

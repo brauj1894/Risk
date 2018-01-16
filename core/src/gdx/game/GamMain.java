@@ -13,22 +13,24 @@ import gdx.game.screens.ScrMenuInstruct;
 import gdx.game.screens.ScrMenuMain;
 import gdx.game.scratches.ScratchGamAttack;
 import gdx.game.scratches.ScratchGamTiled;
+import gdx.game.scratches.ScratchGamDiceRoller;
 
 /**
  * @author brauj1894
  * @author siria3007
  */
 public class GamMain extends Game {
-    
-    ScrMenuMain  scrMenuMain;
-    ScrMenuInstruct  scrMenuInstruct;
-    ScrGamSetup  scrGamSetup;
-    ScrGam  scrGam;
-    ScrGamAttack  scrGamAttack;
-    ScrGamOver  scrGamOver;
+
+    ScrMenuMain scrMenuMain;
+    ScrMenuInstruct scrMenuInstruct;
+    ScrGamSetup scrGamSetup;
+    ScrGam scrGam;
+    ScrGamAttack scrGamAttack;
+    ScrGamOver scrGamOver;
     ScratchGamAttack ScratchGamAttack;
     ScratchGamTiled ScratchGamTiled;
-    
+    ScratchGamDiceRoller ScratchGamDiceRoller;
+
     @Override
     public void create() {
         scrMenuMain = new gdx.game.screens.ScrMenuMain(this);
@@ -39,6 +41,7 @@ public class GamMain extends Game {
         scrGamOver = new gdx.game.screens.ScrGamOver(this);
         ScratchGamAttack = new gdx.game.scratches.ScratchGamAttack(this);
         ScratchGamTiled = new gdx.game.scratches.ScratchGamTiled(this);
+        ScratchGamDiceRoller = new gdx.game.scratches.ScratchGamDiceRoller(this);
         changeScreen(0);
     }
 
@@ -50,8 +53,8 @@ public class GamMain extends Game {
     @Override
     public void dispose() {
     }
-    
-    public void changeScreen(int nScreen){
+
+    public void changeScreen(int nScreen) {
         switch (nScreen) {
             case 0:
                 // Main Menu
@@ -84,6 +87,10 @@ public class GamMain extends Game {
             case 7:
                 //Scratch for the tiled map
                 setScreen(ScratchGamTiled);
+                break;
+            case 8:
+                //Scratch for the dice rolling function
+                setScreen(ScratchGamDiceRoller);
                 break;
             default:
                 break;

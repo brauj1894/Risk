@@ -22,11 +22,10 @@ import java.util.Random;
 public class ScratchGamAttack implements Screen {
 
     Random ranGen = new Random();
-    int nRandAttack, nRandDefend;
     SpriteBatch batch;
     GamMain game;
     Sprite sprBG;
-    Texture txtBG, txtAttack, txtDefend, txtWhite1, txtWhite2;
+    Texture txtBG, txtAttack, txtDefend, txtWhite1, txtWhite2, txtAttackerDiceRoll, txtDefenderDiceRoll;
     Button btnEndBattle, btnBattle;
 
     public ScratchGamAttack(GamMain _game) {
@@ -39,10 +38,9 @@ public class ScratchGamAttack implements Screen {
         sprBG = new Sprite(txtBG, 0, 0, 1144, 744);
         btnBattle = new Button(500, 650, 90, 40, "button_battle.png");
         btnEndBattle = new Button(500, 100, 167, 48, "button_end-battle.png");
+        txtAttackerDiceRoll = new Texture("button_attacker-dice-roll.png");
+        txtDefenderDiceRoll = new Texture("button_defender-dice-roll.png");
         batch = new SpriteBatch();
-        //sprAttack.setX(200);
-        //sprAttack.setY(500);
-
     }
 
     @Override
@@ -59,6 +57,8 @@ public class ScratchGamAttack implements Screen {
         batch.draw(txtWhite1, 325, 650);
         batch.draw(txtDefend, 800, 650);
         batch.draw(txtWhite2, 933, 650);
+        batch.draw(txtAttackerDiceRoll, 20, 400);
+        batch.draw(txtDefenderDiceRoll, 700, 400);
         btnBattle.draw(batch);
         btnEndBattle.draw(batch);
 
@@ -77,7 +77,7 @@ public class ScratchGamAttack implements Screen {
     boolean isBattle = false;
     boolean isTroopsA = true, isTroopsD = true;
     int nTroopsA = 5, nTroopsD = 5;
-
+    int nRandAttack, nRandDefend;
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
             if (btnEndBattle.isMousedOver()) {
@@ -85,10 +85,10 @@ public class ScratchGamAttack implements Screen {
             } 
             if (isTroopsA && isTroopsD) {
                 if (btnBattle.isMousedOver()) {
-                    nRandAttack = ranGen.nextInt(10);
+                    nRandAttack = ranGen.nextInt(5);
                     System.out.println(nRandAttack);
 
-                    nRandDefend = ranGen.nextInt(10);
+                    nRandDefend = ranGen.nextInt(5);
                     System.out.println(nRandDefend);
                     isBattle = true;
                 }
