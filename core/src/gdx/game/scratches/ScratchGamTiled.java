@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import gdx.game.GamMain;
+import gdx.game.objects.Tile;
 
 /**
  *
@@ -24,6 +26,7 @@ public class ScratchGamTiled implements Screen {
     OrthographicCamera camera;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer tmr;
+    Tile arTiles [][] = new Tile [3][3];
     
     public ScratchGamTiled(GamMain _game){
         game = _game;
@@ -36,12 +39,20 @@ public class ScratchGamTiled implements Screen {
         // Loading Tiled Map
         tiledMap = new TmxMapLoader().load("tiledMap2.tmx");
         tmr = new OrthogonalTiledMapRenderer(tiledMap);
+        
+        // Create Tiles
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                arTiles[i][j] = new Tile(game);
+            }
+        }
     }
 
     
 
     @Override
     public void render(float delta) {
+        checkInput();
         graphics();
     }
     
@@ -52,6 +63,21 @@ public class ScratchGamTiled implements Screen {
         camera.update();
         tmr.setView(camera);
         tmr.render();
+    }
+    
+    private void checkInput(){
+        if(Gdx.input.justTouched()){
+            Vector2 vTemp = mouseLocationOnMap();
+            arTiles[(int)vTemp.x][(int)vTemp.y].nTroopCount++;
+            System.out.println("X: "+vTemp.x+" Y: "+vTemp.y+" Troops: "+arTiles[(int)vTemp.x][(int)vTemp.y].nTroopCount);
+        }
+    }
+    
+    private Vector2 mouseLocationOnMap(){
+        Vector2 vMapLocation = new Vector2(0, 0);
+        vMapLocation.x = Gdx.input.getX() / 256; // 256 is the tile size
+        vMapLocation.y = Gdx.input.getY() / 256; // 256 is the tile size
+        return vMapLocation;
     }
     
     @Override
