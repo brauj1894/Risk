@@ -7,11 +7,17 @@ public class Tile {
     
     GamMain game;
     Vector2 vLocation;
-    public int nTroopCount;
+    int nTroopCount;
+    CharSequence str;
     
     public Tile(GamMain _game, int nX, int nY){
         game = _game;
         vLocation = new Vector2(nX, nY);
+        str = "0";
+    }
+    
+    public void updateStr(){
+        str = Integer.toString(nTroopCount);
     }
     
     public float getX(){
@@ -20,5 +26,17 @@ public class Tile {
     
     public float getY(){
         return vLocation.y;
+    }
+    
+    public int getTroopCount(){
+        return nTroopCount;
+    }
+    
+    public void setTroopCount(int _nTroopCount){
+        nTroopCount = _nTroopCount;
+    }
+    
+    public CharSequence getStr(){
+        return str;
     }
 }
