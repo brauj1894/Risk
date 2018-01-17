@@ -66,7 +66,7 @@ public class ScratchGamTiled implements Screen {
     @Override
     public void render(float delta) {
         checkInput(); // Checks for input and handles any input
-        update(); // Updates some game variables once every 30 frames
+        update(); // Updates some game variables once every 10 frames
         graphics(); // Renders graphics
     }
     
@@ -110,7 +110,7 @@ public class ScratchGamTiled implements Screen {
     }
     
     private void update(){
-        if(nCount == 30){
+        if(nCount == 10){
             nCount = 0;
             
             // Update TroopCount
