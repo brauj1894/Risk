@@ -10,7 +10,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -59,7 +58,7 @@ public class ScratchGamTiled implements Screen {
         
         // Load Text
         batch = new SpriteBatch();
-        font = new BitmapFont();
+        font = new BitmapFont(Gdx.files.internal("font2.fnt"));
         font.setColor(Color.BLACK);
     }
 
@@ -129,10 +128,11 @@ public class ScratchGamTiled implements Screen {
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 tile = arTiles[i][j];
+                int nAdd = (tile.getStr().length() == 1) ? 10: 0;
                 
                 // Troop Count
                 batch.begin();
-                font.draw(batch, tile.getStr(), i * 256 + 120, (j * 256 + 120)*(-1)+Gdx.graphics.getHeight());
+                font.draw(batch, tile.getStr(), i * 256 + 100 + nAdd, (j * 256 + 120)*(-1)+Gdx.graphics.getHeight());
                 batch.end();
             }
         }

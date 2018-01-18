@@ -35,10 +35,10 @@ public class ScrGamSetup implements Screen{
     OrthographicCamera camera;
     TiledMap tiledMap;
     OrthogonalTiledMapRenderer tmr;
-    int nCount;
     Tile arTiles [][] = new Tile [3][3];
     Tile tile1, tile2;
     BitmapFont font;
+    int nCount = 0;
     
     public ScrGamSetup(GamMain _game) {
         game = _game;
@@ -46,11 +46,8 @@ public class ScrGamSetup implements Screen{
         sprParch = new Sprite(txtParch,0,0,1400,1008);
         sprParch.setX(768);
         batch = new SpriteBatch();
-        
-        // Creating Buttons
-        btnNextPhase = new Button(100,200,151,40,"button_next-phase.png");
-        btnEndTurn = new Button(100,100,128,40,"button_end-turn.png");
-        
+        btnNextPhase = new Button(800,600,151*2,40*2,"button_next-phase.png");
+        btnEndTurn = new Button(800,400,128*2,40*2,"button_end-turn.png");
         // Creating Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -73,7 +70,6 @@ public class ScrGamSetup implements Screen{
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("font2.fnt"));
         font.setColor(Color.BLACK);
-        font.getData().setScale(1.5f, 1.5f);
     }
     
     @Override
@@ -81,10 +77,15 @@ public class ScrGamSetup implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(32/256f, 64/256f, 256/256f, 1);
         
-        // Main Methods
-        checkInputs();
-        update();
-        graphics();
+        checkInput(); // Checks for input and handles any input
+        update(); // Updates some game variables once every 10 frames
+        graphics(); // Renders graphics
+        
+        batch.begin();
+        sprParch.draw(batch);
+        btnNextPhase.draw(batch);
+        btnEndTurn.draw(batch);
+        batch.end();
     }
     
     private void graphics(){
@@ -98,11 +99,33 @@ public class ScrGamSetup implements Screen{
         
         // Draw Troop Count
         graphicsTiles();
-        
-        // Draw Right Menu
-        batch.begin();
-        sprParch.draw(batch);
-        batch.end();
+    }
+    
+    private void checkInput(){
+        if(Gdx.input.justTouched()){
+            Vector2 vTemp = getMouseLocationOnMap();
+            
+            // Tests adding troops to tiles
+            arTiles[(int)vTemp.x][(int)vTemp.y].setTroopCount(arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount()+1);
+            System.out.println("X: "+vTemp.x+" Y: "+vTemp.y+" Troops: "+arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount());
+            
+            // Tests adjactency
+            /*
+            if(tile1 == null){
+                tile1 = arTiles[(int)vTemp.x][(int)vTemp.y];
+            } else {
+                tile2 = arTiles[(int)vTemp.x][(int)vTemp.y];
+                if(isAdjacent(tile1, tile2)){
+                    System.out.println("X:"+tile1.getX()+" Y:"+tile1.getY()+" is adjacent to X:"+tile2.getX()+" Y:"+tile2.getY());
+                } else {
+                    System.out.println("X:"+tile1.getX()+" Y:"+tile1.getY()+" is not adjacent to X:"+tile2.getX()+" Y:"+tile2.getY());
+                }
+                tile1 = null;
+                tile2 = null;
+            }
+            */
+        }
+        checkButtons();
     }
     
     private void update(){
@@ -125,14 +148,11 @@ public class ScrGamSetup implements Screen{
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
                 tile = arTiles[i][j];
+                int nAdd = (tile.getStr().length() == 1) ? 10: 0;
                 
                 // Troop Count
-                int nAdd = 0;
-                if(tile.getStr().length() == 1){
-                    nAdd = 10;
-                }
                 batch.begin();
-                font.draw(batch, tile.getStr(), i * 256 + 100 + nAdd, (j * 256 + 130)*(-1)+Gdx.graphics.getHeight());
+                font.draw(batch, tile.getStr(), i * 256 + 100 + nAdd, (j * 256 + 120)*(-1)+Gdx.graphics.getHeight());
                 batch.end();
             }
         }
@@ -163,18 +183,12 @@ public class ScrGamSetup implements Screen{
         return false;
     }
     
-    private void checkInputs() {
+    private void checkButtons() {
         if (Gdx.input.justTouched()) {
-            Vector2 vTemp = getMouseLocationOnMap();
-            
-            // Tests adding troops to tiles
-            arTiles[(int)vTemp.x][(int)vTemp.y].setTroopCount(arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount()+1);
-            System.out.println("X: "+vTemp.x+" Y: "+vTemp.y+" Troops: "+arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount());
-            
             if (btnEndTurn.isMousedOver()) {
-                
+                System.out.println("Your turn is over");
             }else if(btnNextPhase.isMousedOver()){
-                
+                System.out.println("Starting the next phase of your turn");
             }
     }
     }

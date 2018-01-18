@@ -21,7 +21,7 @@ public class ScrMenuMain implements Screen {
     GamMain game;
     Sprite sprBG;
     Texture txtBG;
-    Button btnPlay, btnInst,btnAttackScratch, btnTiledScratch;
+    Button btnPlay, btnInst,btnAttackScratch, btnTiledScratch, btnDiceScratch;
     public ScrMenuMain(GamMain _game) {
         game = _game;
         txtBG = new Texture ("bg3.jpg");
@@ -31,6 +31,7 @@ public class ScrMenuMain implements Screen {
         btnInst = new Button(744, 100, 200, 100, "inst.png");
         btnAttackScratch = new Button(200,500,182,40,"button_attack-scratch.png");
         btnTiledScratch = new Button(744,500,166,40,"button_tiled-scratch.png");
+        btnDiceScratch = new Button(500,500,203,40,"button_dice-roll-scratch.png");
     }
 
     @Override
@@ -42,6 +43,7 @@ public class ScrMenuMain implements Screen {
         btnInst.draw(batch);
         btnAttackScratch.draw(batch);
         btnTiledScratch.draw(batch);
+        btnDiceScratch.draw(batch);
         batch.end();
     }
     
@@ -58,6 +60,9 @@ public class ScrMenuMain implements Screen {
             }
             if(btnTiledScratch.isMousedOver()){
                 game.changeScreen(7);
+            }
+            if(btnDiceScratch.isMousedOver()){
+                game.changeScreen(8);
             }
         }
     }
