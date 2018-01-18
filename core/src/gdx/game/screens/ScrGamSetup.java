@@ -80,12 +80,6 @@ public class ScrGamSetup implements Screen{
         checkInput(); // Checks for input and handles any input
         update(); // Updates some game variables once every 10 frames
         graphics(); // Renders graphics
-        
-        batch.begin();
-        sprParch.draw(batch);
-        btnNextPhase.draw(batch);
-        btnEndTurn.draw(batch);
-        batch.end();
     }
     
     private void graphics(){
@@ -97,8 +91,14 @@ public class ScrGamSetup implements Screen{
         tmr.setView(camera);
         tmr.render();
         
-        // Draw Troop Count
+        // Draw Tiles
         graphicsTiles();
+        
+        batch.begin();
+        sprParch.draw(batch);
+        btnNextPhase.draw(batch);
+        btnEndTurn.draw(batch);
+        batch.end();
     }
     
     private void checkInput(){
