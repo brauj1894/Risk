@@ -88,20 +88,15 @@ public class ScratchGamDiceRoller implements Screen {
         }
         Arrays.sort(arnDiceRanAtt);
         Arrays.sort(arnDiceRanDef);
-        System.out.println(arnDiceRanAtt);
         if (arnDiceRanAtt[2] <= arnDiceRanDef[1]) {
             nTroopsA -=1;
-            System.out.println(nTroopsA);
         } else {
             nTroopsD -=1;
-            System.out.println(nTroopsD);
         }
         if (arnDiceRanAtt[1] <= arnDiceRanDef[0]) {
             nTroopsA -=1;
-            System.out.println(nTroopsA);
         } else {
             nTroopsD -=1;
-            System.out.println(nTroopsD);
         }
         System.out.println(arnDiceRanAtt[1]);
         System.out.println(arnDiceRanAtt[2]);
