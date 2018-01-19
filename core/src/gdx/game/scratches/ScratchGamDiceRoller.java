@@ -7,10 +7,12 @@ package gdx.game.scratches;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import gdx.game.GamMain;
 import gdx.game.objects.Button;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -24,8 +26,8 @@ public class ScratchGamDiceRoller implements Screen {
     Sprite sprBG;
     Texture txtBG, txtAttackerDiceRoll, txtDefenderDiceRoll;
     Button btnBattle;
-    int nRA1, nRA2, nRA3;//Dice for attackers
-    int nRD1, nRD2;//Dice for defenders
+    int arnDiceRanAtt[] = new int[3];
+    int arnDiceRanDef[] = new int[2];
     Random ranGen = new Random();
 
     public ScratchGamDiceRoller(GamMain _game) {
@@ -51,50 +53,60 @@ public class ScratchGamDiceRoller implements Screen {
         btnBattle.draw(batch);
         batch.end();
         checkButtons();
+        SpriteBatch spriteBatch;
+        BitmapFont font;
+        CharSequence sDA1 = Integer.toString(arnDiceRanAtt[0]);
+        CharSequence sDA2 = Integer.toString(arnDiceRanAtt[1]);
+        CharSequence sDA3 = Integer.toString(arnDiceRanAtt[2]);
+        CharSequence sDD1 = Integer.toString(arnDiceRanDef[0]);
+        CharSequence sDD2 = Integer.toString(arnDiceRanDef[1]);
+        spriteBatch = new SpriteBatch();
+        spriteBatch.begin();
+        font = new BitmapFont();
+        font.draw(spriteBatch, sDA1, 350, 425);
+        font.draw(spriteBatch, sDA2, 380, 425);
+        font.draw(spriteBatch, sDA3, 410, 425);
+        font.draw(spriteBatch, sDD1, 1020, 425);
+        font.draw(spriteBatch, sDD2, 1050, 425);
+        spriteBatch.end();
     }
 
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
             if (btnBattle.isMousedOver()) {
-
-                nRA1 = ranGen.nextInt(6) + 1;
-                nRA2 = ranGen.nextInt(6) + 1;
-                nRA3 = ranGen.nextInt(6) + 1;
-                nRD1 = ranGen.nextInt(6) + 1;
-                nRD2 = ranGen.nextInt(6) + 1;
-                System.out.println(nRA1);
-                System.out.println(nRA2);
-                System.out.println(nRA3);
-                System.out.println(nRD1);
-                System.out.println(nRD2);
                 diceMechanics();
             }
         }
     }
-    
+    int nTroopsA =5, nTroopsD =5;
     private void diceMechanics() {
-        if(nRA1 < nRA2 && nRA1 < nRA3){
-            System.out.println("First dice is the lowest");
-            if(nRD1>nRD2){
-                
-            }else if(nRD2>nRD1){
-                
-            }
-        }else if(nRA2 < nRA1 && nRA2 < nRA3){
-            System.out.println("Second dice is the lowest");
-            if(nRD1>nRD2){
-                
-            }else if(nRD2>nRD1){
-                
-            }
-        }else if(nRA3 < nRA2 && nRA3 < nRA1){
-            System.out.println("Third dice is the lowest");
-            if(nRD1>nRD2){
-                
-            }else if(nRD2>nRD1){
-                
-            }
+        for (int i = 0; i < 3; i++) {
+            arnDiceRanAtt[i] = ranGen.nextInt(6) + 1;
         }
+        for (int j = 0; j < 2; j++) {
+            arnDiceRanDef[j] = ranGen.nextInt(6) + 1;
+        }
+        Arrays.sort(arnDiceRanAtt);
+        Arrays.sort(arnDiceRanDef);
+        System.out.println(arnDiceRanAtt);
+        if (arnDiceRanAtt[2] <= arnDiceRanDef[1]) {
+            nTroopsA -=1;
+            System.out.println(nTroopsA);
+        } else {
+            nTroopsD -=1;
+            System.out.println(nTroopsD);
+        }
+        if (arnDiceRanAtt[1] <= arnDiceRanDef[0]) {
+            nTroopsA -=1;
+            System.out.println(nTroopsA);
+        } else {
+            nTroopsD -=1;
+            System.out.println(nTroopsD);
+        }
+        System.out.println(arnDiceRanAtt[1]);
+        System.out.println(arnDiceRanAtt[2]);
+        System.out.println(arnDiceRanDef[0]);
+        System.out.println(arnDiceRanDef[1]);
     }
 
     @Override
