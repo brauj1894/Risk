@@ -29,25 +29,31 @@ public class ScrGamSetup implements Screen{
     
     SpriteBatch batch;
     GamMain game;
-    Texture txtBG, txtParch;
-    Button btnNextPhase, btnEndTurn;
-    Sprite sprParch, sprWater;
+    Texture txtBG, txtParch, txtPlayer1, txtPlayer2;
+    Sprite sprParch, sprWater, sprPlayer1, sprPlayer2;
     OrthographicCamera camera;
     TiledMap tiledMap;
     OrthogonalTiledMapRenderer tmr;
     Tile arTiles [][] = new Tile [3][3];
     Tile tile1, tile2;
     BitmapFont font;
-    int nCount = 0;
+    int nCount = 0, nMode = 0, nPlayerTurn = 1;
     
     public ScrGamSetup(GamMain _game) {
         game = _game;
         txtParch = new Texture("paper-background.jpg");
         sprParch = new Sprite(txtParch,0,0,1400,1008);
         sprParch.setX(768);
+        txtPlayer1 = new Texture("button_player1.png");
+        sprPlayer1 = new Sprite(txtPlayer1,110, 45);
+        sprPlayer1.setX(850);
+        sprPlayer1.setY(600);
+        txtPlayer2 = new Texture("button_player2.png");
+        sprPlayer2 = new Sprite(txtPlayer2,110, 45);
+        sprPlayer2.setX(960);
+        sprPlayer2.setY(600);
         batch = new SpriteBatch();
-        btnNextPhase = new Button(800,600,151*2,40*2,"button_next-phase.png");
-        btnEndTurn = new Button(800,400,128*2,40*2,"button_end-turn.png");
+
         // Creating Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -96,36 +102,44 @@ public class ScrGamSetup implements Screen{
         
         batch.begin();
         sprParch.draw(batch);
-        btnNextPhase.draw(batch);
-        btnEndTurn.draw(batch);
         batch.end();
+        
+        // Draw the player picture
+        if(nPlayerTurn == 1){
+            batch.begin();
+            sprPlayer1.draw(batch);
+            batch.end();
+        } else if(nPlayerTurn == 2){
+            batch.begin();
+            sprPlayer2.draw(batch);
+            batch.end();
+        }
     }
     
     private void checkInput(){
         if(Gdx.input.justTouched()){
             Vector2 vTemp = getMouseLocationOnMap();
+            Tile tempTile = null;
             
             // Tests adding troops to tiles
-            arTiles[(int)vTemp.x][(int)vTemp.y].setTroopCount(arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount()+1);
-            System.out.println("X: "+vTemp.x+" Y: "+vTemp.y+" Troops: "+arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount());
-            
-            // Tests adjactency
-            /*
-            if(tile1 == null){
-                tile1 = arTiles[(int)vTemp.x][(int)vTemp.y];
-            } else {
-                tile2 = arTiles[(int)vTemp.x][(int)vTemp.y];
-                if(isAdjacent(tile1, tile2)){
-                    System.out.println("X:"+tile1.getX()+" Y:"+tile1.getY()+" is adjacent to X:"+tile2.getX()+" Y:"+tile2.getY());
-                } else {
-                    System.out.println("X:"+tile1.getX()+" Y:"+tile1.getY()+" is not adjacent to X:"+tile2.getX()+" Y:"+tile2.getY());
-                }
-                tile1 = null;
-                tile2 = null;
+            if(vTemp.x < 3 && vTemp.y < 3){
+                tempTile = arTiles[(int)vTemp.x][(int)vTemp.y];
             }
-            */
+            
+            // Claims the tile if it's free
+            if(nMode == 0 && tempTile != null){
+                if(tempTile.getPlayer() == 0){
+                    tempTile.setTroopCount(1);
+                    if(nPlayerTurn == 1){
+                        tempTile.setPlayer(1);
+                        nPlayerTurn = 2;
+                    } else if(nPlayerTurn == 2){
+                        tempTile.setPlayer(2);
+                        nPlayerTurn = 1;
+                    }
+                }
+            }
         }
-        checkButtons();
     }
     
     private void update(){
@@ -138,24 +152,53 @@ public class ScrGamSetup implements Screen{
                     arTiles[i][j].updateStr();
                 }
             }
+            
+            // Checks if all the tiles are claimed by a player
+            if(nMode == 0){
+                if(isAllTilesClaimed()){
+                    nMode = 1;
+                }
+            }
         } else {
             nCount++;
         }
     }
     
     private void graphicsTiles(){
-        Tile tile;
+        Tile tempTile;
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
-                tile = arTiles[i][j];
-                int nAdd = (tile.getStr().length() == 1) ? 10: 0;
+                tempTile = arTiles[i][j];
+                int nAdd = (tempTile.getStr().length() == 1) ? 10: 0;
                 
-                // Troop Count
+                // Draw Player Icon
+                if(tempTile.getPlayer() == 1){
+                    batch.begin();
+                    batch.draw(txtPlayer1, tempTile.getX() * 256 + 100, (tempTile.getY() * 256 + 100)*(-1)+Gdx.graphics.getHeight());
+                    batch.end();
+                } else if(tempTile.getPlayer() == 2){
+                    batch.begin();
+                    batch.draw(txtPlayer2, tempTile.getX() * 256 + 100, (tempTile.getY() * 256 + 100)*(-1)+Gdx.graphics.getHeight());
+                    batch.end();
+                }
+                
+                // Draw Troop Count
                 batch.begin();
-                font.draw(batch, tile.getStr(), i * 256 + 100 + nAdd, (j * 256 + 120)*(-1)+Gdx.graphics.getHeight());
+                font.draw(batch, tempTile.getStr(), i * 256 + 105 + nAdd, (j * 256 + 120)*(-1)+Gdx.graphics.getHeight());
                 batch.end();
             }
         }
+    }
+    
+    private boolean isAllTilesClaimed(){
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(arTiles[i][j].getPlayer() == 0){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     private Vector2 getMouseLocationOnMap(){
@@ -183,15 +226,6 @@ public class ScrGamSetup implements Screen{
         return false;
     }
     
-    private void checkButtons() {
-        if (Gdx.input.justTouched()) {
-            if (btnEndTurn.isMousedOver()) {
-                System.out.println("Your turn is over");
-            }else if(btnNextPhase.isMousedOver()){
-                System.out.println("Starting the next phase of your turn");
-            }
-    }
-    }
     @Override
     public void show() {
         

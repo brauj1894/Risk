@@ -87,8 +87,10 @@ public class ScratchGamTiled implements Screen {
             Vector2 vTemp = getMouseLocationOnMap();
             
             // Tests adding troops to tiles
-            arTiles[(int)vTemp.x][(int)vTemp.y].setTroopCount(arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount()+1);
-            System.out.println("X: "+vTemp.x+" Y: "+vTemp.y+" Troops: "+arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount());
+            if(vTemp.x < 3 && vTemp.y < 3){
+                arTiles[(int)vTemp.x][(int)vTemp.y].setTroopCount(arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount()+1);
+                System.out.println("X: "+vTemp.x+" Y: "+vTemp.y+" Troops: "+arTiles[(int)vTemp.x][(int)vTemp.y].getTroopCount());
+            }
             
             // Tests adjactency
             /*

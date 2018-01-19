@@ -7,7 +7,7 @@ public class Tile {
     
     GamMain game;
     Vector2 vLocation;
-    int nTroopCount;
+    int nTroopCount, nPlayer = 0;
     CharSequence str;
     
     public Tile(GamMain _game, int nX, int nY){
@@ -36,7 +36,15 @@ public class Tile {
         nTroopCount = _nTroopCount;
     }
     
+    public void setPlayer(int _nPlayer){
+        nPlayer = _nPlayer;
+    }
+    
     public CharSequence getStr(){
         return str;
+    }
+    
+    public int getPlayer(){
+        return nPlayer;
     }
 }
