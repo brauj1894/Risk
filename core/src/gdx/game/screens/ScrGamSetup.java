@@ -37,7 +37,8 @@ public class ScrGamSetup implements Screen{
     Tile arTiles [][] = new Tile [3][3];
     Tile tile1, tile2;
     BitmapFont font;
-    int nCount = 0, nMode = 0, nPlayerTurn = 1;
+    int nCount = 0, nMode = 0, nPlayerTurn = 1, nTroopLimitPlayer1 = 9, nTroopLimitPlayer2 = 9;
+    CharSequence strTroopLimitPlayer1, strTroopLimitPlayer2;
     
     public ScrGamSetup(GamMain _game) {
         game = _game;
@@ -114,6 +115,18 @@ public class ScrGamSetup implements Screen{
             sprPlayer2.draw(batch);
             batch.end();
         }
+        
+        // Say troops left
+        if(nMode == 1){
+            // Player 1
+            batch.begin();
+            font.draw(batch, strTroopLimitPlayer1, 890, 580);
+            batch.end();
+            // Player 2
+            batch.begin();
+            font.draw(batch, strTroopLimitPlayer2, 1000, 580);
+            batch.end();
+        }
     }
     
     private void checkInput(){
@@ -139,6 +152,20 @@ public class ScrGamSetup implements Screen{
                     }
                 }
             }
+            
+            // Adds a troop to the tile
+            if(nMode == 1 && tempTile != null){
+                if(nPlayerTurn == tempTile.getPlayer()){
+                    addTroops(tempTile, 1);
+                    if(nPlayerTurn == 1){
+                        nTroopLimitPlayer1--;
+                        nPlayerTurn = 2;
+                    } else {
+                        nTroopLimitPlayer2--;
+                        nPlayerTurn = 1;
+                    }
+                }
+            }
         }
     }
     
@@ -153,12 +180,23 @@ public class ScrGamSetup implements Screen{
                 }
             }
             
+            // Update TroopLimits
+            strTroopLimitPlayer1 = Integer.toString(nTroopLimitPlayer1);
+            strTroopLimitPlayer2 = Integer.toString(nTroopLimitPlayer2);
+            
             // Checks if all the tiles are claimed by a player
             if(nMode == 0){
                 if(isAllTilesClaimed()){
                     nMode = 1;
+                    nPlayerTurn = 1;
                 }
             }
+            // Checks if players have placed all their blocks
+            if(nMode == 1 && nTroopLimitPlayer2 == 0){
+                game.scrGam.setTileArray(arTiles);
+                game.changeScreen(3);
+            }
+                    
         } else {
             nCount++;
         }
@@ -174,11 +212,11 @@ public class ScrGamSetup implements Screen{
                 // Draw Player Icon
                 if(tempTile.getPlayer() == 1){
                     batch.begin();
-                    batch.draw(txtPlayer1, tempTile.getX() * 256 + 100, (tempTile.getY() * 256 + 100)*(-1)+Gdx.graphics.getHeight());
+                    batch.draw(txtPlayer1, tempTile.getX() * 256 + 66, (tempTile.getY() * 256 + 86)*(-1)+Gdx.graphics.getHeight());
                     batch.end();
                 } else if(tempTile.getPlayer() == 2){
                     batch.begin();
-                    batch.draw(txtPlayer2, tempTile.getX() * 256 + 100, (tempTile.getY() * 256 + 100)*(-1)+Gdx.graphics.getHeight());
+                    batch.draw(txtPlayer2, tempTile.getX() * 256 + 66, (tempTile.getY() * 256 + 86)*(-1)+Gdx.graphics.getHeight());
                     batch.end();
                 }
                 
@@ -188,6 +226,10 @@ public class ScrGamSetup implements Screen{
                 batch.end();
             }
         }
+    }
+    
+    private void addTroops(Tile tempTile, int nAdd){
+        tempTile.setTroopCount(tempTile.getTroopCount()+nAdd);
     }
     
     private boolean isAllTilesClaimed(){
@@ -206,24 +248,6 @@ public class ScrGamSetup implements Screen{
         vMapLocation.x = Gdx.input.getX() / 256; // 256 is the tile size
         vMapLocation.y = Gdx.input.getY() / 256; // 256 is the tile size
         return vMapLocation;
-    }
-    
-    private boolean isAdjacent(Tile tile1, Tile tile2){
-        if(tile1.getX() == tile2.getX()){
-            if(tile1.getY() == tile2.getY() + 1){
-                return true;
-            } else if(tile1.getY() == tile2.getY() - 1){
-                return true;
-            }
-        }
-        if(tile1.getY() == tile2.getY()){
-            if(tile1.getX() == tile2.getX() + 1){
-                return true;
-            } else if(tile1.getX() == tile2.getX() - 1){
-                return true;
-            }
-        }
-        return false;
     }
     
     @Override
