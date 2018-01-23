@@ -39,7 +39,7 @@ public class ScrGam implements Screen{
     BitmapFont font;
     int nCount = 0, nMode = 0, nPlayerTurn = 1, nTroopLimitPlayer1 = 1, nTroopLimitPlayer2 = 1;
     CharSequence strTroopLimitPlayer1 = Integer.toString(nTroopLimitPlayer1), strTroopLimitPlayer2 = Integer.toString(nTroopLimitPlayer2);
-    Button btnAttack;
+    Button btnAttack, btnEndTurn;
     
     public ScrGam(GamMain _game) {
         game = _game;
@@ -58,6 +58,7 @@ public class ScrGam implements Screen{
         txtDefend = new Texture("button_defend.png");
         batch = new SpriteBatch();
         btnAttack = new Button(850, 510, 125, 48, "button_attack.png");
+        btnEndTurn = new Button(850, 450, 128, 40, "button_end-turn.png");
 
         // Creating Camera
         camera = new OrthographicCamera();
@@ -153,6 +154,13 @@ public class ScrGam implements Screen{
             }
         }
         
+        // Draw end turn button
+        if(nMode == 1){
+            batch.begin();
+            btnEndTurn.draw(batch);
+            batch.end();
+        }
+        
         // Say the stage
         if(nMode == 0){
             batch.begin();
@@ -213,6 +221,21 @@ public class ScrGam implements Screen{
                         game.scrGamAttack.setTroops(tileAttack.getTroopCount(), tileDefend.getTroopCount());
                         game.scrGamAttack.setup();
                         game.changeScreen(4);
+                    }
+                }
+            }
+            
+            // Checks if the end turn button is clicked
+            if(nMode == 1){
+                if(btnEndTurn.isMousedOver()){
+                    if(nPlayerTurn == 1){
+                        nPlayerTurn = 2;
+                        calTroopLimitPlayer2();
+                        nMode = 0;
+                    } else {
+                        nPlayerTurn = 1;
+                        calTroopLimitPlayer1();
+                        nMode = 0;
                     }
                 }
             }
@@ -334,7 +357,7 @@ public class ScrGam implements Screen{
     
     private void calTroopLimitPlayer2(){
         int nTilesOwned = getNumOfOwnedTiles(2);
-        nTroopLimitPlayer1 = 3 + (nTilesOwned / 2);
+        nTroopLimitPlayer2 = 3 + (nTilesOwned / 2);
     }
     
     public void setTileArray(Tile[][] _arTiles){
