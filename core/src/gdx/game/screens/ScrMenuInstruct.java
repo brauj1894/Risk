@@ -48,7 +48,7 @@ public class ScrMenuInstruct implements Screen {
         try{
             Scanner fin = new Scanner(new FileReader("Instructions.txt"));
             str = "";
-            for(int i = 0; i < 20; i++){
+            for(int i = 0; i < 20; i++){//https://stackoverflow.com/questions/12466385/how-can-i-draw-text-using-libgdx-java 
                 str += fin.nextLine() + "\n";
             }
         }

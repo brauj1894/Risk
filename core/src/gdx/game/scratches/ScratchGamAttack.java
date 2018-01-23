@@ -70,7 +70,7 @@ public class ScratchGamAttack implements Screen {
         spriteBatch = new SpriteBatch();
         spriteBatch.begin();
         font = new BitmapFont();
-        font.draw(spriteBatch, sNumberAttackers, 341, 670);
+        font.draw(spriteBatch, sNumberAttackers, 341, 670);//https://stackoverflow.com/questions/12466385/how-can-i-draw-text-using-libgdx-java 
         font.draw(spriteBatch, sNumberDefenders, 950, 670);
         spriteBatch.end();
     }
