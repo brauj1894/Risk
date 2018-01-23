@@ -32,6 +32,11 @@ public class ScrGamAttack implements Screen {
     Texture txtAttackerDiceRoll, txtDefenderDiceRoll;
     int arnDiceRanAtt[] = new int[3];
     int arnDiceRanDef[] = new int[2];
+    boolean isBattle = false;
+    boolean isTroopsA = true, isTroopsD = true;
+    int nTroopsA = 5, nTroopsD = 5;
+    SpriteBatch spriteBatch;
+    BitmapFont font;
 
     public ScrGamAttack(GamMain _game) {
         game = _game;
@@ -47,11 +52,14 @@ public class ScrGamAttack implements Screen {
         txtDefenderDiceRoll = new Texture("button_defender-dice-roll.png");
         btnBattle = new Button(500, 650, 90, 40, "button_battle.png");
         batch = new SpriteBatch();
+        spriteBatch = new SpriteBatch();
+        font = new BitmapFont();
     }
 
     @Override
     public void render(float delta) {
         checkButtons();
+        
         batch.begin();
         sprBG.draw(batch);
         batch.draw(txtAttack, 200, 650);
@@ -62,15 +70,12 @@ public class ScrGamAttack implements Screen {
         batch.draw(txtDefenderDiceRoll, 700, 400);
         btnBattle.draw(batch);
         btnEndBattle.draw(batch);
-
         batch.end();
-        SpriteBatch spriteBatch;
-        BitmapFont font;
+        
         CharSequence sNumberAttackers = Integer.toString(nTroopsA);
         CharSequence sNumberDefenders = Integer.toString(nTroopsD);
-        spriteBatch = new SpriteBatch();
+        
         spriteBatch.begin();
-        font = new BitmapFont();
         font.draw(spriteBatch, sNumberAttackers, 341, 670);
         font.draw(spriteBatch, sNumberDefenders, 950, 670);
         CharSequence sDA1 = Integer.toString(arnDiceRanAtt[0]);
@@ -85,14 +90,12 @@ public class ScrGamAttack implements Screen {
         font.draw(spriteBatch, sDD2, 1050, 425);
         spriteBatch.end();
     }
-    boolean isBattle = false;
-    boolean isTroopsA = true, isTroopsD = true;
-    int nTroopsA = 5, nTroopsD = 5;
+    
 
     private void checkButtons() {
         if (Gdx.input.justTouched()) {
             if (btnEndBattle.isMousedOver()) {
-                game.changeScreen(0);
+                endBattle();
             }
             if (isTroopsA && isTroopsD) {
                 if (btnBattle.isMousedOver()) {
@@ -100,9 +103,9 @@ public class ScrGamAttack implements Screen {
                 }
                 
             }else{
-                game.changeScreen(0);
+                endBattle();
             }
-            if(nTroopsA <= 0){
+            if(nTroopsA <= 1){
                 isTroopsA = false;
             }
             if(nTroopsD <= 0){
@@ -121,23 +124,46 @@ public class ScrGamAttack implements Screen {
         Arrays.sort(arnDiceRanDef);
         System.out.println(arnDiceRanAtt);
         if (arnDiceRanAtt[2] <= arnDiceRanDef[1]) {
-            nTroopsA -=1;
-            System.out.println(nTroopsA);
+            if(nTroopsA > 1){
+                nTroopsA -=1;
+                System.out.println(nTroopsA);
+            }
         } else {
-            nTroopsD -=1;
-            System.out.println(nTroopsD);
+            if(nTroopsD > 0){
+                nTroopsD -=1;
+                System.out.println(nTroopsD);
+            }
         }
         if (arnDiceRanAtt[1] <= arnDiceRanDef[0]) {
-            nTroopsA -=1;
-            System.out.println(nTroopsA);
+            if(nTroopsA > 1){
+                nTroopsA -=1;
+                System.out.println(nTroopsA);
+            }
         } else {
-            nTroopsD -=1;
-            System.out.println(nTroopsD);
+            if(nTroopsD > 0){
+                nTroopsD -=1;
+                System.out.println(nTroopsD);
+            }
         }
         System.out.println(arnDiceRanAtt[1]);
         System.out.println(arnDiceRanAtt[2]);
         System.out.println(arnDiceRanDef[0]);
         System.out.println(arnDiceRanDef[1]);
+    }
+    
+    public void setTroops(int nTroopsAttack, int nTroopsDefend){
+        nTroopsA = nTroopsAttack;
+        nTroopsD = nTroopsDefend;
+    }
+    
+    public void setup(){
+        isTroopsA = true;
+        isTroopsD = true;
+    }
+    
+    private void endBattle(){
+        game.scrGam.battleFinished(nTroopsA, nTroopsD, isTroopsD);
+        game.changeScreen(3);
     }
 
     @Override

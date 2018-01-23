@@ -25,7 +25,7 @@ public class GamMain extends Game {
     ScrMenuInstruct scrMenuInstruct;
     ScrGamSetup scrGamSetup;
     public ScrGam scrGam;
-    ScrGamAttack scrGamAttack;
+    public ScrGamAttack scrGamAttack;
     ScrGamOver scrGamOver;
     ScratchGamAttack ScratchGamAttack;
     ScratchGamTiled ScratchGamTiled;

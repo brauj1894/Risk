@@ -4,7 +4,6 @@
  */
 package gdx.game.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -19,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import gdx.game.GamMain;
+import gdx.game.objects.Button;
 import gdx.game.objects.Tile;
 
 /**
@@ -39,6 +39,7 @@ public class ScrGam implements Screen{
     BitmapFont font;
     int nCount = 0, nMode = 0, nPlayerTurn = 1, nTroopLimitPlayer1 = 1, nTroopLimitPlayer2 = 1;
     CharSequence strTroopLimitPlayer1 = Integer.toString(nTroopLimitPlayer1), strTroopLimitPlayer2 = Integer.toString(nTroopLimitPlayer2);
+    Button btnAttack;
     
     public ScrGam(GamMain _game) {
         game = _game;
@@ -56,6 +57,7 @@ public class ScrGam implements Screen{
         txtAttack = new Texture("button_attack.png");
         txtDefend = new Texture("button_defend.png");
         batch = new SpriteBatch();
+        btnAttack = new Button(850, 510, 125, 48, "button_attack.png");
 
         // Creating Camera
         camera = new OrthographicCamera();
@@ -132,15 +134,24 @@ public class ScrGam implements Screen{
         if(nMode == 1){
             if(tileAttack != null){
                 batch.begin();
-                    batch.draw(txtAttack, tileAttack.getX() * 256 + 65, (tileAttack.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
-                    batch.end();
-                }
-                if(tileDefend != null){
-                    batch.begin();
-                    batch.draw(txtDefend, tileDefend.getX() * 256 + 65, (tileDefend.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
-                    batch.end();
-                }
+                batch.draw(txtAttack, tileAttack.getX() * 256 + 65, (tileAttack.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
+                batch.end();
             }
+            if(tileDefend != null){
+                batch.begin();
+                batch.draw(txtDefend, tileDefend.getX() * 256 + 65, (tileDefend.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
+                batch.end();
+            }
+        }
+        
+        // Draw button to attack
+        if(nMode == 1){
+            if(tileAttack != null && tileDefend != null){
+                batch.begin();
+                btnAttack.draw(batch);
+                batch.end();
+            }
+        }
         
         // Say the stage
         if(nMode == 0){
@@ -191,6 +202,17 @@ public class ScrGam implements Screen{
                 if(tempTile.getPlayer() != nPlayerTurn && tileAttack != null){
                     if(isAdjacent(tileAttack, tempTile)){
                         tileDefend = tempTile;
+                    }
+                }
+            }
+            
+            // Checks if the attack button is clicked
+            if(nMode == 1){
+                if(tileAttack != null && tileDefend != null){
+                    if(btnAttack.isMousedOver()){
+                        game.scrGamAttack.setTroops(tileAttack.getTroopCount(), tileDefend.getTroopCount());
+                        game.scrGamAttack.setup();
+                        game.changeScreen(4);
                     }
                 }
             }
@@ -318,6 +340,27 @@ public class ScrGam implements Screen{
     public void setTileArray(Tile[][] _arTiles){
         arTiles = _arTiles;
         calTroopLimitPlayer1();
+    }
+    
+    public void battleFinished(int nTroopsAttack, int nTroopsDefend, boolean bTroopsDefend){
+        if(bTroopsDefend){
+            tileAttack.setTroopCount(nTroopsAttack);
+            tileDefend.setTroopCount(nTroopsDefend);
+        } else {
+            switchPlayer(tileDefend.getPlayer(), tileDefend);
+            tileAttack.setTroopCount(nTroopsAttack / 2);
+            tileDefend.setTroopCount(nTroopsAttack / 2 + (nTroopsAttack % 2));
+        }
+        tileAttack = null;
+        tileDefend = null;
+    }
+    
+    private void switchPlayer(int nPlayer, Tile tile){
+        if(nPlayer == 1){
+            tile.setPlayer(2);
+        } else {
+            tile.setPlayer(1);
+        }
     }
     
     @Override
