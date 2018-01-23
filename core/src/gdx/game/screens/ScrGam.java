@@ -29,16 +29,16 @@ public class ScrGam implements Screen{
     
     SpriteBatch batch;
     GamMain game;
-    Texture txtBG, txtParch, txtPlayer1, txtPlayer2;
+    Texture txtBG, txtParch, txtPlayer1, txtPlayer2, txtAttack, txtDefend;
     Sprite sprParch, sprWater, sprPlayer1, sprPlayer2;
     OrthographicCamera camera;
     TiledMap tiledMap;
     OrthogonalTiledMapRenderer tmr;
     Tile arTiles [][] = new Tile [3][3];
-    Tile tile1, tile2;
+    Tile tileAttack, tileDefend;
     BitmapFont font;
-    int nCount = 0, nMode = 0, nPlayerTurn = 1, nTroopLimitPlayer1 = 9, nTroopLimitPlayer2 = 9;
-    CharSequence strTroopLimitPlayer1, strTroopLimitPlayer2;
+    int nCount = 0, nMode = 0, nPlayerTurn = 1, nTroopLimitPlayer1 = 1, nTroopLimitPlayer2 = 1;
+    CharSequence strTroopLimitPlayer1 = Integer.toString(nTroopLimitPlayer1), strTroopLimitPlayer2 = Integer.toString(nTroopLimitPlayer2);
     
     public ScrGam(GamMain _game) {
         game = _game;
@@ -53,6 +53,8 @@ public class ScrGam implements Screen{
         sprPlayer2 = new Sprite(txtPlayer2,110, 45);
         sprPlayer2.setX(960);
         sprPlayer2.setY(600);
+        txtAttack = new Texture("button_attack.png");
+        txtDefend = new Texture("button_defend.png");
         batch = new SpriteBatch();
 
         // Creating Camera
@@ -64,8 +66,8 @@ public class ScrGam implements Screen{
         tiledMap = new TmxMapLoader().load("tiledMap2.tmx");
         tmr = new OrthogonalTiledMapRenderer(tiledMap);
         
-        tile1 = null;
-        tile2 = null;
+        tileAttack = null;
+        tileDefend = null;
         
         // Load Text
         batch = new SpriteBatch();
@@ -111,14 +113,47 @@ public class ScrGam implements Screen{
         }
         
         // Say troops left
-        if(nMode == 1){
+        if(nMode == 0){
             // Player 1
-            batch.begin();
-            font.draw(batch, strTroopLimitPlayer1, 890, 580);
-            batch.end();
+            if(nPlayerTurn == 1){
+                batch.begin();
+                font.draw(batch, strTroopLimitPlayer1, 890, 580);
+                batch.end();
+            }
             // Player 2
+            if(nPlayerTurn == 2){
+                batch.begin();
+                font.draw(batch, strTroopLimitPlayer2, 1000, 580);
+                batch.end();
+            }
+        }
+        
+        // Draws the attack and defend tiles on the map
+        if(nMode == 1){
+            if(tileAttack != null){
+                batch.begin();
+                    batch.draw(txtAttack, tileAttack.getX() * 256 + 65, (tileAttack.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
+                    batch.end();
+                }
+                if(tileDefend != null){
+                    batch.begin();
+                    batch.draw(txtDefend, tileDefend.getX() * 256 + 65, (tileDefend.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
+                    batch.end();
+                }
+            }
+        
+        // Say the stage
+        if(nMode == 0){
             batch.begin();
-            font.draw(batch, strTroopLimitPlayer2, 1000, 580);
+            font.draw(batch, "Reinforce", 850, 700);
+            batch.end();
+        } else if(nMode == 1){
+            batch.begin();
+            font.draw(batch, "Attack", 850, 700);
+            batch.end();
+        } else if(nMode == 2){
+            batch.begin();
+            font.draw(batch, "Fortify", 850, 700);
             batch.end();
         }
     }
@@ -128,35 +163,34 @@ public class ScrGam implements Screen{
             Vector2 vTemp = getMouseLocationOnMap();
             Tile tempTile = null;
             
-            // Tests adding troops to tiles
+            // Checks if the click was on the map
             if(vTemp.x < 3 && vTemp.y < 3){
                 tempTile = arTiles[(int)vTemp.x][(int)vTemp.y];
             }
             
-            // Claims the tile if it's free
+            // Adds Reinforcements
             if(nMode == 0 && tempTile != null){
-                if(tempTile.getPlayer() == 0){
-                    tempTile.setTroopCount(1);
+                if(tempTile.getPlayer() == nPlayerTurn){
+                    addTroops(tempTile, 1);
                     if(nPlayerTurn == 1){
-                        tempTile.setPlayer(1);
-                        nPlayerTurn = 2;
-                    } else if(nPlayerTurn == 2){
-                        tempTile.setPlayer(2);
-                        nPlayerTurn = 1;
+                        nTroopLimitPlayer1--;
+                    } else {
+                        nTroopLimitPlayer2--;
                     }
                 }
             }
             
-            // Adds a troop to the tile
+            // Select tiles to attack
             if(nMode == 1 && tempTile != null){
-                if(nPlayerTurn == tempTile.getPlayer()){
-                    addTroops(tempTile, 1);
-                    if(nPlayerTurn == 1){
-                        nTroopLimitPlayer1--;
-                        nPlayerTurn = 2;
-                    } else {
-                        nTroopLimitPlayer2--;
-                        nPlayerTurn = 1;
+                // Select Attack Tile
+                if(tempTile.getPlayer() == nPlayerTurn){
+                    tileAttack = tempTile;
+                    tileDefend = null;
+                }
+                // Select Defend Tile
+                if(tempTile.getPlayer() != nPlayerTurn && tileAttack != null){
+                    if(isAdjacent(tileAttack, tempTile)){
+                        tileDefend = tempTile;
                     }
                 }
             }
@@ -177,20 +211,17 @@ public class ScrGam implements Screen{
             // Update TroopLimits
             strTroopLimitPlayer1 = Integer.toString(nTroopLimitPlayer1);
             strTroopLimitPlayer2 = Integer.toString(nTroopLimitPlayer2);
-            
-            // Checks if all the tiles are claimed by a player
+                    
+            // Checks if all reinforcements have been placed
             if(nMode == 0){
-                if(isAllTilesClaimed()){
+                if(nPlayerTurn == 1 && nTroopLimitPlayer1 <= 0){
                     nMode = 1;
-                    nPlayerTurn = 1;
+                }
+                if(nPlayerTurn == 2 && nTroopLimitPlayer2 <= 0){
+                    nMode = 1;
                 }
             }
-            // Checks if players have placed all their blocks
-            if(nMode == 1 && nTroopLimitPlayer2 == 0){
-                nMode = 2;
-                nPlayerTurn = 1;
-            }
-                    
+            
         } else {
             nCount++;
         }
@@ -262,8 +293,31 @@ public class ScrGam implements Screen{
         return false;
     }
     
+    private int getNumOfOwnedTiles(int nPlayer){
+        int nCount = 0;
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(arTiles[i][j].getPlayer() == nPlayer){
+                    nCount++;
+                }
+            }
+        }
+        return nCount;
+    }
+    
+    private void calTroopLimitPlayer1(){
+        int nTilesOwned = getNumOfOwnedTiles(1);
+        nTroopLimitPlayer1 = 3 + (nTilesOwned / 2);
+    }
+    
+    private void calTroopLimitPlayer2(){
+        int nTilesOwned = getNumOfOwnedTiles(2);
+        nTroopLimitPlayer1 = 3 + (nTilesOwned / 2);
+    }
+    
     public void setTileArray(Tile[][] _arTiles){
         arTiles = _arTiles;
+        calTroopLimitPlayer1();
     }
     
     @Override
