@@ -29,17 +29,17 @@ public class ScrGam implements Screen{
     
     SpriteBatch batch;
     GamMain game;
-    Texture txtBG, txtParch, txtPlayer1, txtPlayer2, txtAttack, txtDefend;
+    Texture txtBG, txtParch, txtPlayer1, txtPlayer2, txtAttack, txtDefend, txtNegOne, txtPosOne;
     Sprite sprParch, sprWater, sprPlayer1, sprPlayer2;
     OrthographicCamera camera;
     TiledMap tiledMap;
     OrthogonalTiledMapRenderer tmr;
     Tile arTiles [][] = new Tile [3][3];
-    Tile tileAttack, tileDefend;
+    Tile tileAttack, tileDefend, tileNegOne, tilePosOne;
     BitmapFont font;
-    int nCount = 0, nMode = 0, nPlayerTurn = 1, nTroopLimitPlayer1 = 1, nTroopLimitPlayer2 = 1;
+    int nCount = 0, nMode = 0, nPlayerTurn = 2, nTroopLimitPlayer1 = 1, nTroopLimitPlayer2 = 1;
     CharSequence strTroopLimitPlayer1 = Integer.toString(nTroopLimitPlayer1), strTroopLimitPlayer2 = Integer.toString(nTroopLimitPlayer2);
-    Button btnAttack, btnEndTurn;
+    Button btnAttack, btnFortify, btnEndTurn, btnNextPhase;
     
     public ScrGam(GamMain _game) {
         game = _game;
@@ -56,9 +56,13 @@ public class ScrGam implements Screen{
         sprPlayer2.setY(600);
         txtAttack = new Texture("button_attack.png");
         txtDefend = new Texture("button_defend.png");
+        txtNegOne = new Texture("button_-1.png");
+        txtPosOne = new Texture("button_+1.png");
         batch = new SpriteBatch();
         btnAttack = new Button(850, 510, 125, 48, "button_attack.png");
+        btnFortify = new Button(850, 510, 125, 48, "button_fortify.png");
         btnEndTurn = new Button(850, 450, 128, 40, "button_end-turn.png");
+        btnNextPhase = new Button(850, 450, 128, 40, "button_next-phase.png");
 
         // Creating Camera
         camera = new OrthographicCamera();
@@ -71,6 +75,8 @@ public class ScrGam implements Screen{
         
         tileAttack = null;
         tileDefend = null;
+        tileNegOne = null;
+        tilePosOne = null;
         
         // Load Text
         batch = new SpriteBatch();
@@ -145,6 +151,20 @@ public class ScrGam implements Screen{
             }
         }
         
+        // Draws the fortify tiles on the map
+        if(nMode == 2){
+            if(tileNegOne != null){
+                batch.begin();
+                batch.draw(txtNegOne, tileNegOne.getX() * 256 + 98, (tileNegOne.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
+                batch.end();
+            }
+            if(tilePosOne != null){
+                batch.begin();
+                batch.draw(txtPosOne, tilePosOne.getX() * 256 + 96, (tilePosOne.getY() * 256 + 40)*(-1)+Gdx.graphics.getHeight());
+                batch.end();
+            }
+        }
+        
         // Draw button to attack
         if(nMode == 1){
             if(tileAttack != null && tileDefend != null){
@@ -154,8 +174,24 @@ public class ScrGam implements Screen{
             }
         }
         
-        // Draw end turn button
+        // Draw button to fortify
+        if(nMode == 2){
+            if(tileNegOne != null && tilePosOne != null){
+                batch.begin();
+                btnFortify.draw(batch);
+                batch.end();
+            }
+        }
+        
+        // Draw next phase button
         if(nMode == 1){
+            batch.begin();
+            btnNextPhase.draw(batch);
+            batch.end();
+        }
+        
+        // Draw end turn button
+        if(nMode == 2){
             batch.begin();
             btnEndTurn.draw(batch);
             batch.end();
@@ -202,7 +238,7 @@ public class ScrGam implements Screen{
             // Select tiles to attack
             if(nMode == 1 && tempTile != null){
                 // Select Attack Tile
-                if(tempTile.getPlayer() == nPlayerTurn){
+                if(tempTile.getPlayer() == nPlayerTurn && tempTile.getTroopCount() >= 2){
                     tileAttack = tempTile;
                     tileDefend = null;
                 }
@@ -211,6 +247,22 @@ public class ScrGam implements Screen{
                     if(isAdjacent(tileAttack, tempTile)){
                         tileDefend = tempTile;
                     }
+                }
+            }
+            
+            // Select tiles to fortify
+            if(nMode == 2 && tempTile != null){
+                if(tileNegOne != null && tilePosOne != null){
+                    tileNegOne = null;
+                    tilePosOne = null;
+                }
+                // Select PosOne Tile
+                if(tempTile.getPlayer() == nPlayerTurn && tileNegOne != null){
+                    tilePosOne = tempTile;
+                }
+                // Select NegOne Tile
+                if(tempTile.getPlayer() == nPlayerTurn && tempTile.getTroopCount() >= 2 && tileNegOne == null){
+                    tileNegOne = tempTile;
                 }
             }
             
@@ -225,8 +277,20 @@ public class ScrGam implements Screen{
                 }
             }
             
+            // Checks if the fortify button is clicked
+            if(nMode == 2){
+                if(tileNegOne != null && tilePosOne != null){
+                    if(btnFortify.isMousedOver()){
+                        if(tileNegOne.getTroopCount() >= 2){
+                            tileNegOne.setTroopCount(tileNegOne.getTroopCount()-1);
+                            tilePosOne.setTroopCount(tilePosOne.getTroopCount()+1);
+                        }
+                    }
+                }
+            }
+            
             // Checks if the end turn button is clicked
-            if(nMode == 1){
+            if(nMode == 2){
                 if(btnEndTurn.isMousedOver()){
                     if(nPlayerTurn == 1){
                         nPlayerTurn = 2;
@@ -237,6 +301,15 @@ public class ScrGam implements Screen{
                         calTroopLimitPlayer1();
                         nMode = 0;
                     }
+                }
+            }
+            
+            // Checks if the next phase button is clicked
+            if(nMode == 1){
+                if(btnNextPhase.isMousedOver()){
+                    nMode = 2;
+                    tileNegOne = null;
+                    tilePosOne = null;
                 }
             }
         }
@@ -362,7 +435,7 @@ public class ScrGam implements Screen{
     
     public void setTileArray(Tile[][] _arTiles){
         arTiles = _arTiles;
-        calTroopLimitPlayer1();
+        calTroopLimitPlayer2();
     }
     
     public void battleFinished(int nTroopsAttack, int nTroopsDefend, boolean bTroopsDefend){
